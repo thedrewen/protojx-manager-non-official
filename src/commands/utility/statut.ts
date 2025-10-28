@@ -76,7 +76,7 @@ export default {
 
         async function fetchAlive(host: {host: string, name: string, alive: boolean, type: 'ping' | 'website'}) {
             if(host.type === 'ping'){
-                let res = await ping.promise.probe(host.host, {timeout: 3});
+                let res = await ping.promise.probe(host.host, {timeout: 5});
                 host.alive = res.alive;
             }else if(host.type === 'website'){
                 try {
