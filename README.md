@@ -8,11 +8,9 @@ A status bot and other features for protojx.
 | /status command | 🚧 |
 | Notification system in case of downtime | ➖ |
 
-✅ -> Done
-
-🚧 -> Under development
-
-➖ -> Not started
+- ✅ -> Done
+- 🚧 -> Under development
+- ➖ -> Not started
 
 
 # Readme Template By UnderScape :
