@@ -1,7 +1,7 @@
 # Protojx Manager Non Official
 A status bot and other features for protojx.
 
-# Features :
+## Features :
 
 | Description | Status |
 |-------------|--------|
