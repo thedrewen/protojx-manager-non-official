@@ -1,4 +1,20 @@
-# Discord Bot with TypeScript
+# Protojx Manager Non Official
+A status bot and other features for protojx.
+
+# Features :
+
+| Description | Status |
+|-------------|--------|
+| /status command | 🚧 |
+| Notification system in case of downtime | ➖ |
+
+✅ -> Done
+🚧 -> Under development
+➖ -> Not started
+
+
+# Readme Template By UnderScape :
+## Discord Bot with TypeScript
 A modern Discord bot template built with TypeScript for scalable and maintainable bot development.
 
 ## Features
