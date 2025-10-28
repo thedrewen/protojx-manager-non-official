@@ -31,20 +31,44 @@ export default {
                 type: 'website'
             },
             {
-                host: 'node.thedrewen.com',
-                name: 'Ryzen 9 (Unknow ID) 🖥️',
+                host: '5.178.99.4',
+                name: 'RYZEN 01 🖥️',
                 alive: false,
                 type: 'ping'
             },
             {
-                host: 'node.under-scape.com',
-                name: 'Xeon E5 (Unknow ID) 🖥️',
+                host: '5.167.99.6',
+                name: 'RYZEN 02 🖥️',
                 alive: false,
                 type: 'ping'
             },
             {
-                host: 'panel.protojx.com',
-                name: 'Game Ryzen 👾',
+                host: '5.178.99.5',
+                name: 'RYZEN 03 🖥️',
+                alive: false,
+                type: 'ping'
+            },
+            {
+                host: '5.178.99.177',
+                name: 'XEON 01 (2697A V4) 🖥️',
+                alive: false,
+                type: 'ping'
+            },
+            {
+                host: '5.178.99.248',
+                name: 'XEON 02 (2687W V4) 🖥️',
+                alive: false,
+                type: 'ping'
+            },
+            {
+                host: '5.178.99.53',
+                name: 'RYZEN-GAME 01 👾',
+                alive: false,
+                type: 'ping'
+            },
+            {
+                host: '5.178.99.63',
+                name: 'XEON-GAME 01 👾',
                 alive: false,
                 type: 'ping'
             }
