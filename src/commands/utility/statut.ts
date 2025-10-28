@@ -38,7 +38,7 @@ export default {
             },
             {
                 host: 'node.under-scape.com',
-                name: 'Xeon (Unknow ID) 🖥️',
+                name: 'Xeon E5 (Unknow ID) 🖥️',
                 alive: false,
                 type: 'ping'
             },
