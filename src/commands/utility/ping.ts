@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, CommandInteraction, InteractionContextType, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, ChatInputCommandInteraction, CommandInteraction, InteractionContextType, SlashCommandBuilder } from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
@@ -13,7 +13,7 @@ export default {
             InteractionContextType.Guild,
             InteractionContextType.PrivateChannel
         ),
-    async execute(interaction : CommandInteraction) {
+    async execute(interaction : ChatInputCommandInteraction) {
         await interaction.reply('Pong !');
     }
 }

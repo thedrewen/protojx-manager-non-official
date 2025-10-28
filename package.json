@@ -27,7 +27,9 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "@types/ping": "^0.4.4",
     "discord.js": "^14.24.0",
-    "dotenv": "^17.2.2"
+    "dotenv": "^17.2.2",
+    "ping": "^1.0.0"
   }
 }
