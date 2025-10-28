@@ -9,7 +9,9 @@ A status bot and other features for protojx.
 | Notification system in case of downtime | ➖ |
 
 ✅ -> Done
+
 🚧 -> Under development
+
 ➖ -> Not started
 
 
