@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@types/ping": "^0.4.4",
+    "cron": "^4.3.3",
     "discord.js": "^14.24.1",
     "dotenv": "^17.2.2",
     "ping": "^1.0.0"

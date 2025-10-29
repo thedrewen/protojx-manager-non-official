@@ -1,0 +1,1 @@
+type Host = { host: string, name: string, alive: boolean, type: 'ping' | 'website' };

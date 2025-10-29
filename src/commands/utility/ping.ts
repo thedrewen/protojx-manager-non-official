@@ -14,6 +14,6 @@ export default {
             InteractionContextType.PrivateChannel
         ),
     async execute(interaction : ChatInputCommandInteraction) {
-        await interaction.reply('Pong !');
+        await interaction.reply(`🏓 Latency is ${Date.now() - interaction.createdTimestamp}ms. API Latency : ${interaction.client.ws.ping}ms`);
     }
 }
