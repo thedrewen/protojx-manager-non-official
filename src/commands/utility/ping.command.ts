@@ -1,6 +1,7 @@
 import { ApplicationIntegrationType, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, CommandInteraction, ComponentType, ContainerBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from "discord.js";
+import { CommandDefinition } from "../../type";
 
-export default {
+const cmd : CommandDefinition = {
     data: new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Pong again!')
@@ -44,3 +45,5 @@ export default {
         }}
     ]
 }
+
+export default CommandDefinition;
