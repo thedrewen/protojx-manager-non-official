@@ -24,7 +24,7 @@ export class StatusService {
             type: 'ping'
         },
         {
-            host: '5.167.99.4', // Replace by .6 when icmp work !
+            host: '5.178.99.6',
             name: 'RYZEN 02 🖥️',
             alive: false,
             type: 'ping'
@@ -64,6 +64,11 @@ export class StatusService {
     private client : Client|null = null;
     
     constructor() {
+
+        setTimeout(async () => {
+            await this.fetch()
+            this.updateClientStatus();
+        }, 3000);
         const cronJob = new cron.CronJob('*/2 * * * *', async () => {
             try {
                 await this.fetch();
@@ -97,8 +102,9 @@ export class StatusService {
         
         const hosts = this.hosts.filter((value, index) => index < max * 10 && index >= (max - 1) * 10);
         async function fetchAlive(host: Host) {
+            console.log(host.name+" "+host.host)
             if(host.type === 'ping'){
-                let res = await ping.promise.probe(host.host, {timeout: 5});
+                let res = await ping.promise.probe(host.host, {timeout: 3});
                 host.alive = res.alive;
             }else if(host.type === 'website'){
                 try {
