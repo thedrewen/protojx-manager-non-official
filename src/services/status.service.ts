@@ -24,7 +24,7 @@ export class StatusService {
             type: 'ping'
         },
         {
-            host: '5.167.99.6',
+            host: '5.167.99.4', // Replace by .6 when icmp work !
             name: 'RYZEN 02 🖥️',
             alive: false,
             type: 'ping'
