@@ -1,6 +1,8 @@
 # Protojx Manager Non Official
 A status bot and other features for protojx.
 
+Add bot : https://discord.com/oauth2/authorize?client_id=1432680068085190656
+
 ## Features :
 
 | Description | Status |
