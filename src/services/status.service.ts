@@ -1,6 +1,7 @@
 import ping from "ping";
 import * as cron from 'cron';
 import { ActivityType, Client } from "discord.js";
+import { Host } from "../type";
 
 export class StatusService {
 
