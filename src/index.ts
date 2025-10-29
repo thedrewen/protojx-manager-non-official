@@ -6,6 +6,7 @@ import statusService from "./services/status.service";
 
 import "reflect-metadata";
 import { AppDataSource } from "./data-source";
+import { CommandDefinition } from "./type";
 
 configDotenv();
 
@@ -24,7 +25,7 @@ const client = new Client({
     ]
 });
 
-const commands = new Collection<string, {data: SlashCommandBuilder, execute: (interaction: ChatInputCommandInteraction) => void, buttons?: {id: string, handle: (interaction : ButtonInteraction) => void}[]}>();
+const commands = new Collection<string, CommandDefinition>();
 
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
