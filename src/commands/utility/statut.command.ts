@@ -25,7 +25,7 @@ export default {
         embed.setThumbnail(interaction.client.user.avatarURL())
 
         for(let host of statusService.hosts){
-            embed.addFields({name: host.name, value: host.alive ? '<a:online:1432684754276323431> Online' : '<a:offline:1432684900175183882> Offline', inline: false});
+            embed.addFields({name: host.name, value: host.alive ? `${process.env.EMOJI_STATUS_ONLINE} Online` : `${process.env.EMOJI_STATUS_OFFLINE} Offline`, inline: false});
         }
         
         await interaction.editReply({embeds: [embed]});
