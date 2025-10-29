@@ -1,7 +1,7 @@
 import { ApplicationIntegrationType, ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, InteractionContextType, SlashCommandBuilder } from "discord.js";
 import ping from "ping";
 import statusService from "../../services/status.service";
-import CommandDefinition from "./ping.command";
+import { CommandDefinition } from "../../type";
 
 const cmd : CommandDefinition = {
     data: new SlashCommandBuilder()

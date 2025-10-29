@@ -46,4 +46,4 @@ const cmd : CommandDefinition = {
     ]
 }
 
-export default CommandDefinition;
+export default cmd;
