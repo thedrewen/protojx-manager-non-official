@@ -108,7 +108,7 @@ export class StatusService {
                 host.alive = res.alive;
             }else if(host.type === 'website'){
                 try {
-                    const response = await fetch(host.host, { method: 'HEAD', signal: AbortSignal.timeout(3000) });
+                    const response = await fetch(host.host, { method: 'HEAD', signal: AbortSignal.timeout(10000) });
                     host.alive = response.ok;
                 } catch (error) {
                     host.alive = false; 
