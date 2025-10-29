@@ -2,6 +2,7 @@ import { Client, Collection, Events, GatewayIntentBits, MessageFlags } from "dis
 import { configDotenv } from "dotenv";
 import path from "path";
 import fs from "fs";
+import statusService from "./services/status.service";
 
 configDotenv();
 
@@ -61,6 +62,7 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.once(Events.ClientReady, readyClient => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+	statusService.setClient(client);
 });
 
 client.login(process.env.TOKEN)

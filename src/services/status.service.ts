@@ -1,5 +1,6 @@
 import ping from "ping";
 import * as cron from 'cron';
+import { ActivityType, Client } from "discord.js";
 
 export class StatusService {
 
@@ -59,11 +60,14 @@ export class StatusService {
             type: 'ping'
         }
     ]
+
+    private client : Client|null = null;
     
     constructor() {
         const cronJob = new cron.CronJob('*/2 * * * *', async () => {
             try {
                 await this.fetch();
+                await this.updateClientStatus();
                 console.log('Status check completed at:', new Date().toISOString());
             } catch (error) {
                 console.error('Error during status check:', error);
@@ -71,9 +75,25 @@ export class StatusService {
         });
         cronJob.start();
         console.log('Status monitoring started - checking every 2 minutes');
+    }   
+
+    setClient(client : Client) {
+        this.client = client;
+        this.client.user?.setActivity({name: '💭 Server load and status...'})
     }
 
-    async fetch(max = 1): Promise<Host[]> {
+    private async updateClientStatus() {
+        if(this.client) {
+            const hosts = this.hosts.length;
+            const hostsAlive = this.hosts.filter((h) => h.alive).length;
+
+            this.client.user?.setActivity({name: (
+                hosts == hostsAlive ? '✅ All services are online.' : `📛 ${hosts - hostsAlive} service${hosts - hostsAlive > 1 ? 's' : ''} offline.`
+            ), type: ActivityType.Watching});
+        }
+    }
+
+    private async fetch(max = 1): Promise<Host[]> {
         
         const hosts = this.hosts.filter((value, index) => index < max * 10 && index >= (max - 1) * 10);
         async function fetchAlive(host: Host) {

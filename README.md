@@ -5,11 +5,12 @@ A status bot and other features for protojx.
 
 | Description | Status |
 |-------------|--------|
-| /status command | ✅ |
-| Number of services down in the bot's status. | ➖ |
+| /status command | 🌐 |
+| Number of services down in the bot's status. | ✅ |
 | Notification system in case of downtime. | ➖ |
 | Deployment workflow on Raspberry Pi. | ➖ |
 
+- 🌐 -> In production
 - ✅ -> Done
 - 🚧 -> Under development
 - ➖ -> Not started
