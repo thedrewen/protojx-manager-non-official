@@ -102,7 +102,6 @@ export class StatusService {
         
         const hosts = this.hosts.filter((value, index) => index < max * 10 && index >= (max - 1) * 10);
         async function fetchAlive(host: Host) {
-            console.log(host.name+" "+host.host)
             if(host.type === 'ping'){
                 let res = await ping.promise.probe(host.host, {timeout: 3});
                 host.alive = res.alive;
