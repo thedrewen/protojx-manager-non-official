@@ -4,7 +4,16 @@ import path from "path";
 import fs from "fs";
 import statusService from "./services/status.service";
 
+import "reflect-metadata";
+import { AppDataSource } from "./data-source";
+
 configDotenv();
+
+AppDataSource.initialize()
+.then(() => {
+	console.log("Data Source initialized !")
+})
+.catch((error) => console.log(error));
 
 const client = new Client({
     intents: [

@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Under-scape/discordbot-ts-template#readme",
   "devDependencies": {
+    "@types/node": "^24.9.2",
     "typescript": "^5.9.2"
   },
   "dependencies": {
@@ -31,6 +32,9 @@
     "cron": "^4.3.3",
     "discord.js": "^14.24.1",
     "dotenv": "^17.2.2",
-    "ping": "^1.0.0"
+    "pg": "^8.16.3",
+    "ping": "^1.0.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.27"
   }
 }
