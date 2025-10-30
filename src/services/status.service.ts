@@ -101,7 +101,9 @@ export class StatusService {
 
     private async fetch(max = 1): Promise<Host[]> {
         
-        const hosts = this.hosts.filter((value, index) => index < max * 10 && index >= (max - 1) * 10);
+        const max_ping = 3;
+
+        const hosts = this.hosts.filter((value, index) => index < max * max_ping && index >= (max - 1) * max_ping);
         async function fetchAlive(host: Host) {
             if(host.type === 'ping'){
                 let res = await ping.promise.probe(host.host, {timeout: 3});
@@ -121,13 +123,13 @@ export class StatusService {
         const updatedHosts = await Promise.all(fetchPromises);
 
         updatedHosts.forEach((updatedHost, index) => {
-            const originalIndex = (max - 1) * 10 + index;
+            const originalIndex = (max - 1) * max_ping + index;
             if (originalIndex < this.hosts.length) {
                 this.hosts[originalIndex] = updatedHost;
             }
         });
 
-        if(this.hosts.length > max * 10) {
+        if(this.hosts.length > max * max_ping) {
             await this.fetch(max + 1);
         }
 
