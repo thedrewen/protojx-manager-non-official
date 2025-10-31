@@ -5,73 +5,78 @@ import { Host } from "../type";
 import { loadEnvFile } from "process";
 import { configDotenv } from "dotenv";
 
-configDotenv();
-
 export class StatusService {
-
-    private EMOJI_RYZEN : string = process.env.EMOJI_RYZEN as string;
-    private EMOJI_XEON : string = process.env.EMOJI_XEON as string;
 
     public hosts: Host[] = [
             {
                 'host': 'https://protojx.com',
-                'name': 'Protojx Website 🌐',
+                'name': 'Protojx Website',
                 alive: false,
+                ping_type: 'website',
                 type: 'website'
             },
             {
                 'host': 'https://manager.protojx.com',
-                'name': 'Espace Client 💻',
+                'name': 'Espace Client',
                 alive: false,
+                ping_type: 'website',
                 type: 'website'
             },
             {
                 host: '5.178.99.4',
-                name: 'RYZEN 01 ' + this.EMOJI_RYZEN,
+                name: 'RYZEN 01',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'ryzen'
             },
             {
                 host: '5.178.99.6',
-                name: 'RYZEN 02 ' + this.EMOJI_RYZEN,
+                name: 'RYZEN 02',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'ryzen'
             },
             {
                 host: '5.178.99.5',
-                name: 'RYZEN 03 ' + this.EMOJI_RYZEN,
+                name: 'RYZEN 03',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'ryzen'
             },
             {
                 host: '154.16.254.10',
-                name: 'RYZEN7 04 ' + this.EMOJI_RYZEN,
+                name: 'RYZEN7 04',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'ryzen'
             },
             {
                 host: '5.178.99.177',
-                name: 'XEON 01 (2697A V4) ' + this.EMOJI_XEON,
+                name: 'XEON 01 (2697A V4)',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'xeon'
             },
             {
                 host: '5.178.99.248',
-                name: 'XEON 02 (2687W V4) ' + this.EMOJI_XEON,
+                name: 'XEON 02 (2687W V4)',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'xeon'
             },
             {
                 host: '5.178.99.53',
-                name: 'RYZEN-GAME 01 👾',
+                name: 'RYZEN-GAME 01',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'games'
             },
             {
                 host: '5.178.99.63',
-                name: 'XEON-GAME 01 👾',
+                name: 'XEON-GAME 01',
                 alive: false,
-                type: 'ping'
+                ping_type: 'ping',
+                type: 'games'
             }
         ];
 
@@ -120,10 +125,10 @@ export class StatusService {
 
         const hosts = this.hosts.filter((value, index) => index < max * max_ping && index >= (max - 1) * max_ping);
         async function fetchAlive(host: Host) {
-            if (host.type === 'ping') {
+            if (host.ping_type === 'ping') {
                 let res = await ping.promise.probe(host.host, { timeout: 10 });
                 host.alive = res.alive;
-            } else if (host.type === 'website') {
+            } else if (host.ping_type === 'website') {
                 try {
                     const response = await fetch(host.host, { method: 'HEAD', signal: AbortSignal.timeout(10000) });
                     host.alive = response.ok;
