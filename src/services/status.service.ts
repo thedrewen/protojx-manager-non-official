@@ -104,9 +104,9 @@ export class StatusService {
         }, 3000);
         const cronJob = new cron.CronJob('*/2 * * * *', async () => {
 
+            // ? cleanup logs
             const oneMonthAgo = new Date();
             oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
             this.hostsLogRepo.
                 createQueryBuilder()
                 .delete()
@@ -114,6 +114,7 @@ export class StatusService {
                 .where("created_at < :date", { date: oneMonthAgo })
                 .execute();
             
+            // ? Get status
             try {
                 await this.fetch();
                 await this.updateClientStatus();
@@ -166,7 +167,7 @@ export class StatusService {
             const log = new HostsLog();
             log.host = host.host;
             log.status = host.alive;
-            
+
             this.hostsLogRepo.save(log);
         }
 
