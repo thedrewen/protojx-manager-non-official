@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, CommandInteraction, ComponentType, ContainerBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, ButtonInteraction, ButtonStyle, ChatInputCommandInteraction, ContainerBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from "discord.js";
 import { CommandDefinition } from "../../type";
 
 const cmd : CommandDefinition = {

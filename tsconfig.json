@@ -25,7 +25,8 @@
     "emitDecoratorMetadata": true,
     "removeComments": false,
     "preserveConstEnums": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "noUnusedLocals": true
   },
   "include": [
     "src/**/*"

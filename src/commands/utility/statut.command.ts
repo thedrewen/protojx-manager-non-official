@@ -1,8 +1,6 @@
-import { ApplicationIntegrationType, ChatInputCommandInteraction, CommandInteraction, ContainerBuilder, EmbedBuilder, InteractionContextType, MessageFlags, SlashCommandBuilder } from "discord.js";
-import ping from "ping";
+import { ApplicationIntegrationType, ChatInputCommandInteraction, InteractionContextType, MessageFlags, SlashCommandBuilder } from "discord.js";
 import statusService from "../../services/status.service";
-import { CommandDefinition, InfraType } from "../../type";
-import { secureHeapUsed } from "crypto";
+import { CommandDefinition} from "../../type";
 
 const cmd : CommandDefinition = {
     data: new SlashCommandBuilder()

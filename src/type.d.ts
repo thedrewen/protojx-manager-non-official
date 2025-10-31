@@ -6,6 +6,7 @@ export type Host = {
     name: string,
     alive: boolean, 
     ping_type: 'ping' | 'website',
-    type: InfraType
+    type: InfraType,
+    notify: boolean;
 };
 export type CommandDefinition = { data: SlashCommandBuilder, execute: (interaction: ChatInputCommandInteraction) => void, buttons?: { id: string, handle: (interaction: ButtonInteraction) => void}[]};
