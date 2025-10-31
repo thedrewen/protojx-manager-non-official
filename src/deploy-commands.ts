@@ -21,7 +21,7 @@ for (const folder of commandFolders) {
     if (!fs.statSync(commandsPath).isDirectory()) continue;
 
     const commandFiles = fs.readdirSync(commandsPath).filter(file => 
-        file.endsWith('.js')
+        file.endsWith('.command.js')
     );
     
     for (const file of commandFiles) {

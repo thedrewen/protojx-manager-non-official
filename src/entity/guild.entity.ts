@@ -10,4 +10,7 @@ export class Guild {
 
     @Column()
     persistent_message_id: string;
+
+    @Column()
+    persistent_message_channel_id: string;
 }

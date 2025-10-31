@@ -6,6 +6,7 @@ import { AppDataSource } from "../data-source";
 import { HostsLog } from "../entity/hostslog.entity";
 import { Repository } from "typeorm";
 import { Follow } from "../entity/follow.entity";
+import { Guild } from "../entity/guild.entity";
 
 type Nofity = {time: Date, name : string, alive : boolean, type : InfraType};
 
@@ -97,11 +98,13 @@ export class StatusService {
     private client: Client | null = null;
     private hostsLogRepo: Repository<HostsLog>;
     private followRepo: Repository<Follow>;
+    private guildRepo: Repository<Guild>;
 
     constructor() {
 
         this.hostsLogRepo = AppDataSource.getRepository(HostsLog);
         this.followRepo = AppDataSource.getRepository(Follow);
+        this.guildRepo = AppDataSource.getRepository(Guild);
 
         setTimeout(async () => {
             await this.fetch()
@@ -123,6 +126,23 @@ export class StatusService {
             try {
                 await this.fetch();
                 await this.updateClientStatus();
+
+                // ? Message Live 
+                const guilds = await this.guildRepo.find();
+            
+                guilds.forEach(async (gdb) => {
+                    if(this.client) {
+                        try {
+                            const guild = await this.client.guilds.fetch(gdb.guild_id);
+                            const channel = await guild.channels.fetch(gdb.persistent_message_channel_id);
+                            if(channel?.isSendable())  {
+                                const message = await channel.messages.fetch(gdb.persistent_message_id);
+                                await message.edit({components: [this.getUpdatedContainer(true)]});
+                            }
+                        } catch (error) {}
+                    }
+                });
+                
                 console.log('Status check completed at:', new Date().toISOString());
             } catch (error) {
                 console.error('Error during status check:', error);
@@ -223,14 +243,14 @@ export class StatusService {
         }
     }
 
-    public getUpdatedContainer(): ContainerBuilder {
+    public getUpdatedContainer(live : boolean = false): ContainerBuilder {
         const hostTexts = this.hosts.map((s) => {
             return { type: s.type, value: `- ${s.name} : ${s.alive ? `${process.env.EMOJI_STATUS_ONLINE} Online` : `${process.env.EMOJI_STATUS_OFFLINE} Offline`}` };
         });
 
         const container = new ContainerBuilder()
             .setAccentColor(0x0000ed)
-            .addTextDisplayComponents((text) => text.setContent('# Status of protojx services'));
+            .addTextDisplayComponents((text) => text.setContent('# Status of protojx services'+(live ? ' (live)' : '')));
 
         const sections: { title: string, type: InfraType, thumbnail: string }[] = [
             {
@@ -271,7 +291,7 @@ export class StatusService {
         });
 
         const now = new Date();
-        container.addTextDisplayComponents((text) => text.setContent(`${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${(now.getHours() + '').padStart(2, "0")}:${(now.getMinutes() + '').padStart(2, "0")} - Receive automatic notifications when there is an outage with /follow !`));
+        container.addTextDisplayComponents((text) => text.setContent(`${live ? 'Last update : ' : ''}${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${(now.getHours() + '').padStart(2, "0")}:${(now.getMinutes() + '').padStart(2, "0")} - Receive automatic notifications when there is an outage with /follow !`));
 
         return container;
     }
