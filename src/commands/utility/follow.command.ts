@@ -8,7 +8,6 @@ const cmd : CommandDefinition = {
         .setName('follow')
         .setDescription('Enables/disables the receipt of service status notifications.')
         .setIntegrationTypes(
-            ApplicationIntegrationType.GuildInstall,
             ApplicationIntegrationType.UserInstall
         )
         .setContexts(
