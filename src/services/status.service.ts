@@ -7,6 +7,8 @@ import { HostsLog } from "../entity/hostslog.entity";
 import { Repository } from "typeorm";
 import { Follow } from "../entity/follow.entity";
 
+type Nofity = {time: Date, name : string, alive : boolean, type : InfraType};
+
 export class StatusService {
 
     public hosts: Host[] = [
@@ -148,7 +150,7 @@ export class StatusService {
         }
     }
 
-    private async fetchAlive(host: Host) {
+    private async fetchAlive(host: Host, notifs : Nofity[]) {
 
         const latestLog = await this.hostsLogRepo.findOne({ where: { host: host.host }, order: { created_at: 'DESC' } });
 
@@ -174,35 +176,20 @@ export class StatusService {
             this.hostsLogRepo.save(log);
 
             if(latestLog && host.notify) {
-                const users = await this.followRepo.find({where: {enable: true}});
-                users.forEach(async (user) => {
-                    try {
-                        const userdc = await this.client?.users.fetch(user.user_discord);
-                        if(userdc) {
-
-                            const container = new ContainerBuilder()
-                                .setAccentColor(host.alive ? 0x00FF00 : 0xFF0000)
-                                .addTextDisplayComponents((t) => t.setContent(`### 🔔 Status change alert`))
-                                .addSeparatorComponents((s) => s)
-                                .addTextDisplayComponents((t) => t.setContent(`${host.alive ? process.env.EMOJI_STATUS_ONLINE : process.env.EMOJI_STATUS_OFFLINE} **${host.name}** is now **${host.alive ? 'online' : 'offline'}**\n🏷️ Type : ${host.type}\n🕒 Time : <t:${Math.round(new Date().getTime()/1000)}:R>`));
-
-                            userdc.send({components: [container], flags: [MessageFlags.IsComponentsV2]})
-                        }
-                    } catch (error) {}
-                });
+                notifs.push({alive: host.alive, name: host.name, time: new Date(), type: host.type});
             }
         }
 
         return host;
     }
 
-    private async fetch(max = 1): Promise<Host[]> {
+    private async fetch(max = 1, notifs : Nofity[] = []) {
 
         const max_ping = 3;
 
         const hosts = this.hosts.filter((value, index) => index < max * max_ping && index >= (max - 1) * max_ping);
 
-        const fetchPromises = hosts.map(host => this.fetchAlive(host));
+        const fetchPromises = hosts.map(host => this.fetchAlive(host, notifs));
         const updatedHosts = await Promise.all(fetchPromises);
 
         updatedHosts.forEach((updatedHost, index) => {
@@ -213,10 +200,27 @@ export class StatusService {
         });
 
         if (this.hosts.length > max * max_ping) {
-            await this.fetch(max + 1);
-        }
+            await this.fetch(max + 1, notifs);
+        }else if(notifs.length > 0){
+            // ? Notification System (part 2 !):
+            const container = new ContainerBuilder()
+                .addTextDisplayComponents((t) => t.setContent(`### 🔔 Status change alert`));
 
-        return this.hosts;
+            notifs.map(async (n) => {
+                container.addSeparatorComponents((s)=>s);
+                container.addTextDisplayComponents((text) => text.setContent(`${n.alive ? process.env.EMOJI_STATUS_ONLINE : process.env.EMOJI_STATUS_OFFLINE} **${n.name}** is now **${n.alive ? 'online' : 'offline'}**\n🏷️ Type : ${n.type}\n🕒 Time : <t:${Math.round(new Date().getTime()/1000)}:R>`));
+            });
+
+            const users = await this.followRepo.find({where: {enable: true}});
+            users.forEach(async (user) => {
+                try {
+                    const userdc = await this.client?.users.fetch(user.user_discord);
+                    if(userdc) {
+                        userdc.send({components: [container], flags: [MessageFlags.IsComponentsV2]})
+                    }
+                } catch (error) {}
+            });
+        }
     }
 
     public getUpdatedContainer(): ContainerBuilder {
