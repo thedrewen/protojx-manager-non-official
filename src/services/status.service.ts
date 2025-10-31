@@ -173,7 +173,7 @@ export class StatusService {
 
             this.hostsLogRepo.save(log);
 
-            if(latestLog) {
+            if(latestLog && host.notify) {
                 const users = await this.followRepo.find({where: {enable: true}});
                 users.forEach(async (user) => {
                     try {
