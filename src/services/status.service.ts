@@ -1,10 +1,11 @@
 import ping from "ping";
 import * as cron from 'cron';
-import { ActivityType, Client, ContainerBuilder } from "discord.js";
+import { ActivityType, Client, ContainerBuilder, MessageFlags } from "discord.js";
 import { Host, InfraType } from "../type";
 import { AppDataSource } from "../data-source";
 import { HostsLog } from "../entity/hostslog.entity";
 import { Repository } from "typeorm";
+import { Follow } from "../entity/follow.entity";
 
 export class StatusService {
 
@@ -93,10 +94,12 @@ export class StatusService {
 
     private client: Client | null = null;
     private hostsLogRepo: Repository<HostsLog>;
+    private followRepo: Repository<Follow>;
 
     constructor() {
 
         this.hostsLogRepo = AppDataSource.getRepository(HostsLog);
+        this.followRepo = AppDataSource.getRepository(Follow);
 
         setTimeout(async () => {
             await this.fetch()
@@ -169,6 +172,25 @@ export class StatusService {
             log.status = host.alive;
 
             this.hostsLogRepo.save(log);
+
+            if(latestLog) {
+                const users = await this.followRepo.find({where: {enable: true}});
+                users.forEach(async (user) => {
+                    try {
+                        const userdc = await this.client?.users.fetch(user.user_discord);
+                        if(userdc) {
+
+                            const container = new ContainerBuilder()
+                                .setAccentColor(host.alive ? 0x00FF00 : 0xFF0000)
+                                .addTextDisplayComponents((t) => t.setContent(`### 🔔 Status change alert`))
+                                .addSeparatorComponents((s) => s)
+                                .addTextDisplayComponents((t) => t.setContent(`${host.alive ? process.env.EMOJI_STATUS_ONLINE : process.env.EMOJI_STATUS_OFFLINE} **${host.name}** is now **${host.alive ? 'online' : 'offline'}**\n🏷️ Type : ${host.type}\n🕒 Time : <t:${Math.round(new Date().getTime()/1000)}:R>`));
+
+                            userdc.send({components: [container], flags: [MessageFlags.IsComponentsV2]})
+                        }
+                    } catch (error) {}
+                });
+            }
         }
 
         return host;
