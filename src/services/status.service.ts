@@ -267,7 +267,7 @@ export class StatusService {
         });
 
         const now = new Date();
-        container.addTextDisplayComponents((text) => text.setContent(`${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${(now.getHours() + '').padStart(2, "0")}:${(now.getMinutes() + '').padStart(2, "0")}`));
+        container.addTextDisplayComponents((text) => text.setContent(`${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${(now.getHours() + '').padStart(2, "0")}:${(now.getMinutes() + '').padStart(2, "0")} - Receive automatic notifications when there is an outage with /follow !`));
 
         return container;
     }
