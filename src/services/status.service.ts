@@ -250,7 +250,7 @@ export class StatusService {
 
         const container = new ContainerBuilder()
             .setAccentColor(0x0000ed)
-            .addTextDisplayComponents((text) => text.setContent('# Status of protojx services'+(live ? ' (live)' : '')));
+            .addTextDisplayComponents((text) => text.setContent('# Status of Protojx services'+(live ? ' (live)' : '')));
 
         const sections: { title: string, type: InfraType, thumbnail: string }[] = [
             {
