@@ -7,6 +7,7 @@ import { HostsLog } from "../entity/hostslog.entity";
 import { Repository } from "typeorm";
 import { Follow } from "../entity/follow.entity";
 import { Guild } from "../entity/guild.entity";
+import dayjs from "dayjs";
 
 type Nofity = {time: Date, name : string, alive : boolean, type : InfraType, host: string};
 
@@ -302,9 +303,8 @@ export class StatusService {
                         )
             )
         });
-
-        const now = new Date();
-        container.addTextDisplayComponents((text) => text.setContent(`${live ? 'Last update : ' : ''}${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()} ${(now.getHours() + '').padStart(2, "0")}:${(now.getMinutes() + '').padStart(2, "0")} - Receive automatic notifications when there is an outage with /follow !`));
+        
+        container.addTextDisplayComponents((text) => text.setContent(`${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:D> - Receive automatic notifications when there is an outage with /follow !`));
 
         return container;
     }

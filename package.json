@@ -30,6 +30,7 @@
   "dependencies": {
     "@types/ping": "^0.4.4",
     "cron": "^4.3.3",
+    "dayjs": "^1.11.19",
     "discord.js": "^14.24.2",
     "dotenv": "^17.2.2",
     "pg": "^8.16.3",
