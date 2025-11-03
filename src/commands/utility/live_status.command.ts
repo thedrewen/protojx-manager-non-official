@@ -26,7 +26,13 @@ const cmd : CommandDefinition = {
             const channel = await interaction.guild?.channels.fetch(channel_options?.id);
             
             if(channel?.isSendable()) {
-                const message = await channel.send({components: [statusService.getUpdatedContainer(true)], flags: [MessageFlags.IsComponentsV2]});
+                let message;
+                try {
+                    message = await channel.send({components: [statusService.getUpdatedContainer(true)], flags: [MessageFlags.IsComponentsV2]});
+                } catch (error) {
+                    await interaction.reply({content: 'An error has occurred. Please check the permissions for the channel.', flags: [MessageFlags.Ephemeral]});
+                    return;
+                }
 
                 try {
                     const guildRepo = AppDataSource.getRepository(Guild);
