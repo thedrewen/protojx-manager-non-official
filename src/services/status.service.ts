@@ -63,7 +63,7 @@ export class StatusService {
         },
         {
             host: '5.178.99.177',
-            name: 'XEON 01 (2697A V4)',
+            name: 'XEON 01',
             alive: false,
             ping_type: 'ping',
             type: 'xeon',
