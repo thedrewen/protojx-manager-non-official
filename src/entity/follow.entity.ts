@@ -8,6 +8,9 @@ export class Follow {
     @Column()
     user_discord: string;
 
+    @Column()
+    host: string;
+
     @Column({default: false})
     enable: boolean;
 }

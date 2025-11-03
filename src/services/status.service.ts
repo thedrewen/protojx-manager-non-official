@@ -8,7 +8,7 @@ import { Repository } from "typeorm";
 import { Follow } from "../entity/follow.entity";
 import { Guild } from "../entity/guild.entity";
 
-type Nofity = {time: Date, name : string, alive : boolean, type : InfraType};
+type Nofity = {time: Date, name : string, alive : boolean, type : InfraType, host: string};
 
 export class StatusService {
 
@@ -204,7 +204,7 @@ export class StatusService {
             this.hostsLogRepo.save(log);
 
             if(latestLog && host.notify) {
-                notifs.push({alive: host.alive, name: host.name, time: new Date(), type: host.type});
+                notifs.push({alive: host.alive, name: host.name, time: new Date(), type: host.type, host: host.host});
             }
         }
 
@@ -233,14 +233,15 @@ export class StatusService {
             // ? Notification System (part 2 !):
             const container = new ContainerBuilder()
                 .addTextDisplayComponents((t) => t.setContent(`### 🔔 Status change alert`));
-
+            
             notifs.map(async (n) => {
                 container.addSeparatorComponents((s)=>s);
                 container.addTextDisplayComponents((text) => text.setContent(`${n.alive ? process.env.EMOJI_STATUS_ONLINE : process.env.EMOJI_STATUS_OFFLINE} **${n.name}** is now **${n.alive ? 'online' : 'offline'}**\n🏷️ Type : ${n.type}\n🕒 Time : <t:${Math.round(new Date().getTime()/1000)}:R>`));
             });
 
-            const users = await this.followRepo.find({where: {enable: true}});
-            users.forEach(async (user) => {
+            const users = await this.followRepo.find();
+            const hosts = notifs.map((n) => n.host);
+            users.filter(v => hosts.includes(v.host)).forEach(async (user) => {
                 try {
                     const userdc = await this.client?.users.fetch(user.user_discord);
                     if(userdc) {

@@ -13,7 +13,7 @@ A status bot and other features for protojx.
 | Notification system in case of downtime. | 🌐 |
 | Ability to create persistent status messages that update automatically. (/live_status) | 🌐 |
 | Deployment workflow on Oracle VPS. | ➖ |
-| Filter for notifs. | ➖ |
+| Filter for notifs. | ✅ |
 
 - 🌐 -> In production
 - ✅ -> Done
