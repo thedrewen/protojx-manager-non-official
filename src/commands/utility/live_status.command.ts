@@ -30,7 +30,7 @@ const cmd : CommandDefinition = {
                 try {
                     message = await channel.send({components: [statusService.getUpdatedContainer(true)], flags: [MessageFlags.IsComponentsV2]});
                 } catch (error) {
-                    await interaction.reply({content: 'An error has occurred. Please check the permissions for the channel.', flags: [MessageFlags.Ephemeral]});
+                    await interaction.editReply({content: 'An error has occurred. Please check the permissions for the channel.', flags: [MessageFlags.Ephemeral]});
                     return;
                 }
 
