@@ -69,14 +69,14 @@ export class StatusService {
             type: 'xeon',
             notify: true
         },
-        {
-            host: '5.178.99.248',
-            name: 'XEON 02 (2687W V4)',
-            alive: false,
-            ping_type: 'ping',
-            type: 'xeon',
-            notify: true
-        },
+        // {
+        //     host: '5.178.99.248',
+        //     name: 'XEON 02 (2687W V4)',
+        //     alive: false,
+        //     ping_type: 'ping',
+        //     type: 'xeon',
+        //     notify: true
+        // },
         {
             host: '5.178.99.53',
             name: 'RYZEN-GAME 01',
