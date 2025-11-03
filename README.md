@@ -10,9 +10,10 @@ A status bot and other features for protojx.
 |-------------|--------|
 | /status command | 🌐 |
 | Number of services down in the bot's status. | 🌐 |
-| Notification system in case of downtime. | ✅ |
-| Ability to create persistent status messages that update automatically. (/live_status) | ✅ |
-| Deployment workflow on Raspberry Pi. | ➖ |
+| Notification system in case of downtime. | 🌐 |
+| Ability to create persistent status messages that update automatically. (/live_status) | 🌐 |
+| Deployment workflow on Oracle VPS. | ➖ |
+| Filter for notifs. | ➖ |
 
 - 🌐 -> In production
 - ✅ -> Done
