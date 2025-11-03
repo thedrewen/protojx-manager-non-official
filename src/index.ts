@@ -86,6 +86,9 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.once(Events.ClientReady, readyClient => {
     console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+	client.guilds.cache.forEach((value) => {
+		console.log(`${value.name} conf loaded !`);
+	});
 	statusService.setClient(client);
 });
 
