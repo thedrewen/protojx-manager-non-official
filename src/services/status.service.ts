@@ -239,7 +239,7 @@ export class StatusService {
                 container.addTextDisplayComponents((text) => text.setContent(`${n.alive ? process.env.EMOJI_STATUS_ONLINE : process.env.EMOJI_STATUS_OFFLINE} **${n.name}** is now **${n.alive ? 'online' : 'offline'}**\n🏷️ Type : ${n.type}\n🕒 Time : <t:${Math.round(new Date().getTime()/1000)}:R>`));
             });
 
-            const users = await this.followRepo.find();
+            const users = await this.followRepo.find({where: {enable: true}});
             const hosts = notifs.map((n) => n.host);
             users.filter(v => hosts.includes(v.host)).forEach(async (user) => {
                 try {
