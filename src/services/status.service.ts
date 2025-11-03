@@ -304,7 +304,7 @@ export class StatusService {
             )
         });
 
-        container.addTextDisplayComponents((text) => text.setContent(`${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
+        container.addTextDisplayComponents((text) => text.setContent(`Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
 
         return container;
     }
