@@ -1,4 +1,4 @@
-import { ApplicationIntegrationType, ChannelType, ContainerBuilder, MessageFlags, SlashCommandBuilder } from "discord.js";
+import { ApplicationIntegrationType, ChannelType, ContainerBuilder, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandDefinition } from "../../type";
 import statusService from "../../services/status.service";
 import { AppDataSource } from "../../data-source";
@@ -16,7 +16,8 @@ const cmd : CommandDefinition = {
         )
         .setIntegrationTypes(
             ApplicationIntegrationType.GuildInstall
-        ),
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
     async execute(interaction) {
         await interaction.deferReply({flags: [MessageFlags.Ephemeral]});
         
