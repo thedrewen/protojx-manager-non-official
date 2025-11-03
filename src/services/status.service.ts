@@ -241,13 +241,17 @@ export class StatusService {
 
             const users = await this.followRepo.find({where: {enable: true}});
             const hosts = notifs.map((n) => n.host);
+            const users_ids : string[] = [];
             users.filter(v => hosts.includes(v.host)).forEach(async (user) => {
-                try {
-                    const userdc = await this.client?.users.fetch(user.user_discord);
-                    if(userdc) {
-                        userdc.send({components: [container], flags: [MessageFlags.IsComponentsV2]})
-                    }
-                } catch (error) {}
+                if(!users_ids.includes(user.user_discord)) {
+                    users_ids.push(user.user_discord)
+                    try {
+                        const userdc = await this.client?.users.fetch(user.user_discord);
+                        if(userdc) {
+                            userdc.send({components: [container], flags: [MessageFlags.IsComponentsV2]})
+                        }
+                    } catch (error) {}
+                }
             });
         }
     }
