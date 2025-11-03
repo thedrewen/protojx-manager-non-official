@@ -304,7 +304,9 @@ export class StatusService {
             )
         });
 
-        container.addTextDisplayComponents((text) => text.setContent(`Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
+        container.addSeparatorComponents((s) => s);
+
+        container.addTextDisplayComponents((text) => text.setContent(`:globe_with_meridians: Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
 
         return container;
     }
