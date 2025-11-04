@@ -15,16 +15,16 @@ export class StatusService {
 
     public hosts: Host[] = [
         {
-            'host': 'https://protojx.com',
-            'name': 'Protojx Website',
+            host: 'https://protojx.com',
+            name: 'Protojx Website',
             alive: false,
             ping_type: 'website',
             type: 'website',
             notify: false
         },
         {
-            'host': 'https://manager.protojx.com',
-            'name': 'Espace Client',
+            host: 'https://manager.protojx.com',
+            name: 'Espace Client',
             alive: false,
             ping_type: 'website',
             type: 'website',
@@ -297,10 +297,10 @@ export class StatusService {
                         (text) =>
                             text.setContent('## ' + sectionData.title + '\n' + hostTexts.filter((v) => v.type == sectionData.type).map((v) => v.value).join('\n'))
                     )
-                        .setThumbnailAccessory(
-                            (acc) =>
-                                acc.setURL(sectionData.thumbnail)
-                        )
+                    .setThumbnailAccessory(
+                        (acc) =>
+                            acc.setURL(sectionData.thumbnail)
+                    )
             )
         });
 
