@@ -109,7 +109,40 @@ export class StatusService {
             ping_type: 'ping',
             type: 'games',
             notify: true
-        }
+        },
+        // Routers
+        {
+            host: process.env.PROTOJX_ROUTER_1 as string,
+            name: 'ROUTER-FR 01',
+            alive: false,
+            ping_type: 'ping',
+            type: 'router',
+            notify: false
+        },
+        {
+            host: process.env.PROTOJX_ROUTER_2 as string,
+            name: 'ROUTER-FR 02',
+            alive: false,
+            ping_type: 'ping',
+            type: 'router',
+            notify: false
+        },
+        {
+            host: process.env.PROTOJX_ROUTER_3 as string,
+            name: 'ROUTER-DE 03',
+            alive: false,
+            ping_type: 'ping',
+            type: 'router',
+            notify: false
+        },
+        {
+            host: process.env.PROTOJX_ROUTER_1 as string,
+            name: 'ROUTER-DE 04',
+            alive: false,
+            ping_type: 'ping',
+            type: 'router',
+            notify: false
+        },
     ];
 
     private client: Client | null = null;
@@ -294,6 +327,11 @@ export class StatusService {
                 title: 'Games',
                 type: 'games',
                 thumbnail: 'https://protojx.com/assets/img/hero-img.png'
+            },
+            {
+                title: 'Routers',
+                type: 'router',
+                thumbnail: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMnCmtQRkLlcD1Cb6vKXz6NOxAu79vzmq2pRqpNYxpTJa5JQEsouhqnVn7cyl6ivYSyzY&usqp=CAU'
             }
         ]
 

@@ -1,6 +1,6 @@
 import { ButtonInteraction, ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 
-export type InfraType = 'website' | 'ryzen' | 'xeon' | 'games';
+export type InfraType = 'website' | 'ryzen' | 'xeon' | 'games' | 'router';
 export type Host = {
     host: string,
     name: string,
