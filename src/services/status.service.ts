@@ -95,6 +95,14 @@ export class StatusService {
             notify: true
         },
         {
+            host: '5.178.99.17',
+            name: 'RYZEN-GAME 02',
+            alive: false,
+            ping_type: 'ping',
+            type: 'games',
+            notify: true
+        },
+        {
             host: '5.178.99.63',
             name: 'XEON-GAME 01',
             alive: false,
