@@ -136,7 +136,7 @@ export class StatusService {
             notify: false
         },
         {
-            host: process.env.PROTOJX_ROUTER_1 as string,
+            host: process.env.PROTOJX_ROUTER_4 as string,
             name: 'ROUTER-DE 04',
             alive: false,
             ping_type: 'ping',
