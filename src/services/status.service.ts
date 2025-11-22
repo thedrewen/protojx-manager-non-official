@@ -126,23 +126,7 @@ export class StatusService {
             ping_type: 'ping',
             type: 'router',
             notify: false
-        },
-        {
-            host: process.env.PROTOJX_ROUTER_3 as string,
-            name: 'ROUTER-DE 03',
-            alive: false,
-            ping_type: 'ping',
-            type: 'router',
-            notify: false
-        },
-        {
-            host: process.env.PROTOJX_ROUTER_4 as string,
-            name: 'ROUTER-DE 04',
-            alive: false,
-            ping_type: 'ping',
-            type: 'router',
-            notify: false
-        },
+        }
     ];
 
     private client: Client | null = null;
