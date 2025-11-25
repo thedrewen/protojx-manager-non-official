@@ -8,7 +8,6 @@ import { Repository } from "typeorm";
 import { Follow } from "../entity/follow.entity";
 import { Guild } from "../entity/guild.entity";
 import dayjs, { Dayjs } from "dayjs";
-import { stat, writeFile } from "fs";
 import { Canvas } from "canvas";
 
 type Nofity = {time: Date, name : string, alive : boolean, type : InfraType, host: string};
