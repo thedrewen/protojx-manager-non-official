@@ -174,7 +174,9 @@ export class StatusService {
                                 const message = await channel.messages.fetch(gdb.persistent_message_id);
                                 await message.edit({components: [await this.getUpdatedContainer(true)]});
                             }
-                        } catch (error) {}
+                        } catch (error) {
+                            console.log(error)
+                        }
                     }
                 });
                 
