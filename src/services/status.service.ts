@@ -405,10 +405,12 @@ export class StatusService {
         });
 
         container.addSeparatorComponents((s) => s);
-        container.addTextDisplayComponents((t) => t.setContent('This is a status bar to test : (Ryzen7)'))
-        container.addMediaGalleryComponents((m) => m
-            .addItems((i) => i.setURL('attachment://status.png'))
-        );
+        if(!live) {
+            container.addTextDisplayComponents((t) => t.setContent('This is a status bar to test : (Ryzen7)'))
+            container.addMediaGalleryComponents((m) => m
+                .addItems((i) => i.setURL('attachment://status.png'))
+            );
+        }
 
         container.addTextDisplayComponents((text) => text.setContent(`:globe_with_meridians: Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
 
