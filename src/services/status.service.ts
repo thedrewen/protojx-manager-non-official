@@ -195,7 +195,7 @@ export class StatusService {
     public async getStatusImageBar(host: string) {
 
         const datas = await this.hostsLogRepo.createQueryBuilder()
-            .where('created_at > :date', {date: dayjs().subtract(1, 'week').toDate()}).getMany();
+            .where('host = :host AND created_at > :date', {host, date: dayjs().subtract(1, 'week').toDate()}).getMany();
         
         const uptimes : { up: boolean, date: Dayjs }[] = datas.map((log) => {
 
@@ -256,7 +256,7 @@ export class StatusService {
             ctx.fillRect(value.min, 0, value.max - value.min, canvas.height);
         });
 
-        return canvas.toDataURL();
+        return canvas.toBuffer('image/png');
     }
 
     private async updateClientStatus() {
@@ -403,11 +403,10 @@ export class StatusService {
         });
 
         container.addSeparatorComponents((s) => s);
-
-        let status = await this.getStatusImageBar('154.16.254.10');
+        container.addTextDisplayComponents((t) => t.setContent('This is a status bar to test : (Ryzen7)'))
         container.addMediaGalleryComponents((m) => m
-            .addItems((i) => i.setURL(status))
-        )
+            .addItems((i) => i.setURL('attachment://status.png'))
+        );
 
         container.addTextDisplayComponents((text) => text.setContent(`:globe_with_meridians: Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
 
