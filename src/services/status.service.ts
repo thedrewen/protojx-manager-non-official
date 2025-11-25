@@ -210,7 +210,7 @@ export class StatusService {
         const now = dayjs();
         const week = now.clone().subtract(1, 'week');
 
-        const canvas = new Canvas(100, 2, "image");
+        const canvas = new Canvas(500, 10, "image");
         const ctx = canvas.getContext('2d');
 
         ctx.fillStyle = "#27FF00";
@@ -255,7 +255,7 @@ export class StatusService {
         });
         ctx.fillStyle = '#ff0000';
         ranges.map((value) => {
-            ctx.fillRect(value.min, 0, value.max - value.min, canvas.height);
+            ctx.fillRect(value.min * 5, 0, value.max * 5 - value.min * 5, canvas.height);
         });
 
         return canvas.toBuffer('image/png');
