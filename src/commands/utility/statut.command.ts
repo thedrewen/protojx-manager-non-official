@@ -17,7 +17,7 @@ const cmd : CommandDefinition = {
         ),
     async execute(interaction : ChatInputCommandInteraction) {
         await interaction.deferReply();
-        await interaction.editReply({components: [statusService.getUpdatedContainer()], flags: MessageFlags.IsComponentsV2});
+        await interaction.editReply({components: [await statusService.getUpdatedContainer()], flags: MessageFlags.IsComponentsV2});
     }
 }
 

@@ -28,7 +28,7 @@ const cmd : CommandDefinition = {
             if(channel?.isSendable()) {
                 let message;
                 try {
-                    message = await channel.send({components: [statusService.getUpdatedContainer(true)], flags: [MessageFlags.IsComponentsV2]});
+                    message = await channel.send({components: [await statusService.getUpdatedContainer(true)], flags: [MessageFlags.IsComponentsV2]});
                 } catch (error) {
                     await interaction.editReply({content: 'An error has occurred. Please check the permissions for the channel.'});
                     return;

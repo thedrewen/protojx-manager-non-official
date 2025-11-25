@@ -7,7 +7,9 @@ import { HostsLog } from "../entity/hostslog.entity";
 import { Repository } from "typeorm";
 import { Follow } from "../entity/follow.entity";
 import { Guild } from "../entity/guild.entity";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { stat, writeFile } from "fs";
+import { Canvas } from "canvas";
 
 type Nofity = {time: Date, name : string, alive : boolean, type : InfraType, host: string};
 
@@ -171,7 +173,7 @@ export class StatusService {
                             const channel = await guild.channels.fetch(gdb.persistent_message_channel_id);
                             if(channel?.isSendable())  {
                                 const message = await channel.messages.fetch(gdb.persistent_message_id);
-                                await message.edit({components: [this.getUpdatedContainer(true)]});
+                                await message.edit({components: [await this.getUpdatedContainer(true)]});
                             }
                         } catch (error) {}
                     }
@@ -189,6 +191,73 @@ export class StatusService {
     setClient(client: Client) {
         this.client = client;
         this.client.user?.setActivity({ name: '💭 Server load and status...' })
+    }
+
+    public async getStatusImageBar(host: string) {
+
+        const datas = await this.hostsLogRepo.createQueryBuilder()
+            .where('created_at > :date', {date: dayjs().subtract(1, 'week').toDate()}).getMany();
+        
+        const uptimes : { up: boolean, date: Dayjs }[] = datas.map((log) => {
+
+            return {
+                up: log.status,
+                date: dayjs(log.created_at)
+            }
+        });
+
+        const now = dayjs();
+        const week = now.clone().subtract(1, 'week');
+
+        const canvas = new Canvas(100, 2, "image");
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = "#27FF00";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const maxTime = (now.unix() - week.unix());
+        const ranges: { min: number, max: number }[] = [];
+
+        let minTime: number | null = null;
+        uptimes.map((element, index) => {
+            const positionForMaxTime = (element.date.unix() - week.unix());
+            const percent = Math.round((positionForMaxTime / maxTime) * 100);
+
+            if (ranges.length == 0 && minTime == null) {
+                if (element.up && minTime == null) {
+                    ranges.push({
+                        min: 0,
+                        max: percent
+                    });
+                } else {
+                    minTime = percent;
+                }
+            } else {
+                if (!element.up) {
+                    minTime = percent;
+                    
+                    if(minTime != null && index == uptimes.length - 1) {
+                        ranges.push({
+                            min: minTime,
+                            max: 100
+                        });
+                    } 
+                } else {
+                    if (minTime) {
+                        ranges.push({
+                            min: minTime,
+                            max: percent
+                        });
+                    }
+                }
+            }
+        });
+        ctx.fillStyle = '#ff0000';
+        ranges.map((value) => {
+            ctx.fillRect(value.min, 0, value.max - value.min, canvas.height);
+        });
+
+        return canvas.toDataURL();
     }
 
     private async updateClientStatus() {
@@ -282,7 +351,7 @@ export class StatusService {
         }
     }
 
-    public getUpdatedContainer(live : boolean = false): ContainerBuilder {
+    public async getUpdatedContainer(live : boolean = false): Promise<ContainerBuilder> {
         const hostTexts = this.hosts.map((s) => {
             return { type: s.type, value: `- ${s.name} : ${s.alive ? `${process.env.EMOJI_STATUS_ONLINE} Online` : `${process.env.EMOJI_STATUS_OFFLINE} Offline`}` };
         });
@@ -335,6 +404,11 @@ export class StatusService {
         });
 
         container.addSeparatorComponents((s) => s);
+
+        let status = await this.getStatusImageBar('154.16.254.10');
+        container.addMediaGalleryComponents((m) => m
+            .addItems((i) => i.setURL(status))
+        )
 
         container.addTextDisplayComponents((text) => text.setContent(`:globe_with_meridians: Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
 
