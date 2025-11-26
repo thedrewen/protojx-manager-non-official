@@ -56,7 +56,6 @@ export class StatusService {
                     if(this.client) {
                         try {
                             const guild = await this.client.guilds.fetch(gdb.guild_id);
-                            console.log(guild.name)
                             const channel = await guild.channels.fetch(gdb.persistent_message_channel_id);
                             if(channel?.isSendable())  {
                                 const message = await channel.messages.fetch(gdb.persistent_message_id);
