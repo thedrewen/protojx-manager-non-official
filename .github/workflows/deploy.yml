@@ -35,13 +35,13 @@ jobs:
           ssh -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
             cd /home/${{ secrets.VPS_USER }}/protojx/protojx-manager &&
             git pull &&
+
+            # Build new image
+            docker buildx build -t protojx_manager . &&
             
             # Stop and remove old container if exists
             docker stop protojx_manager 2>/dev/null || true &&
             docker rm protojx_manager 2>/dev/null || true &&
-            
-            # Build new image
-            docker buildx build -t protojx_manager . &&
             
             # Run new container
             docker run -d \
