@@ -13,4 +13,4 @@ export class HostsLog {
 
     @CreateDateColumn()
     created_at: Date;
-}
+}   

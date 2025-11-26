@@ -9,6 +9,7 @@ import { Follow } from "../entity/follow.entity";
 import { Guild } from "../entity/guild.entity";
 import dayjs, { Dayjs } from "dayjs";
 import { Canvas } from "canvas";
+import { Service } from "../entity/service.entity";
 
 type Nofity = {time: Date, name : string, alive : boolean, type : InfraType, host: string};
 
@@ -134,12 +135,14 @@ export class StatusService {
     private hostsLogRepo: Repository<HostsLog>;
     private followRepo: Repository<Follow>;
     private guildRepo: Repository<Guild>;
+    private serviceRepo: Repository<Service>;
 
     constructor() {
 
         this.hostsLogRepo = AppDataSource.getRepository(HostsLog);
         this.followRepo = AppDataSource.getRepository(Follow);
         this.guildRepo = AppDataSource.getRepository(Guild);
+        this.serviceRepo = AppDataSource.getRepository(Service);
 
         setTimeout(async () => {
             await this.fetch()
