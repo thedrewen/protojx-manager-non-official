@@ -1,6 +1,10 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import { configDotenv } from "dotenv"
+import { Follow } from "./entity/follow.entity"
+import { Guild } from "./entity/guild.entity"
+import { HostsLog } from "./entity/hostslog.entity"
+import { Service } from "./entity/service.entity"
 
 configDotenv()
 
@@ -13,7 +17,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_DATABASE,
     synchronize: process.env.NODE_ENV !== "production",
     logging: process.env.DB_LOGGING === "true",
-    entities: [__dirname + '/**/*.entity.js'],
+    entities: [Follow, Guild, HostsLog, Service],
     migrations: [__dirname + "/**/*.migration.js"],
     subscribers: [__dirname +  "/**/*.subscriber.js"],
 })

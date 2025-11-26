@@ -1,12 +1,17 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Service } from "./service.entity";
 
 @Entity({name: 'hosts_logs'})
 export class HostsLog {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @ManyToOne(() => Service, service => service.logs)
+    @JoinColumn({name: 'serviceId'})
+    service: Service;
+
     @Column()
-    host: string;
+    serviceId: number;
 
     @Column()
     status: boolean;

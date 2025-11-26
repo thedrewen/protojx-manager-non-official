@@ -1,7 +1,7 @@
 import ping from "ping";
 import * as cron from 'cron';
 import { ActivityType, Client, ContainerBuilder, MessageFlags } from "discord.js";
-import { Host, InfraType } from "../type";
+import { InfraType } from "../type";
 import { AppDataSource } from "../data-source";
 import { HostsLog } from "../entity/hostslog.entity";
 import { Repository } from "typeorm";
@@ -11,131 +11,15 @@ import dayjs, { Dayjs } from "dayjs";
 import { Canvas } from "canvas";
 import { Service } from "../entity/service.entity";
 
-type Nofity = {time: Date, name : string, alive : boolean, type : InfraType, host: string};
+type Nofity = {time: Date, name : string, alive : boolean, type : string, host: Service};
 
 export class StatusService {
-
-    public hosts: Host[] = [
-        {
-            host: 'https://protojx.com',
-            name: 'Protojx Website',
-            alive: false,
-            ping_type: 'website',
-            type: 'website',
-            notify: false
-        },
-        {
-            host: 'https://manager.protojx.com',
-            name: 'Espace Client',
-            alive: false,
-            ping_type: 'website',
-            type: 'website',
-            notify: false
-        },
-        {
-            host: '5.178.99.4',
-            name: 'RYZEN 01',
-            alive: false,
-            ping_type: 'ping',
-            type: 'ryzen',
-            notify: true
-        },
-        {
-            host: '5.178.99.240',
-            name: 'RYZEN 02',
-            alive: false,
-            ping_type: 'ping',
-            type: 'ryzen',
-            notify: true
-        },
-        {
-            host: '5.178.99.5',
-            name: 'RYZEN 03',
-            alive: false,
-            ping_type: 'ping',
-            type: 'ryzen',
-            notify: true
-        },
-        {
-            host: '144.76.35.26',
-            name: 'RYZEN7 04',
-            alive: false,
-            ping_type: 'ping',
-            type: 'ryzen',
-            notify: true
-        },
-        {
-            host: '5.178.99.177',
-            name: 'XEON 01',
-            alive: false,
-            ping_type: 'ping',
-            type: 'xeon',
-            notify: true
-        },
-        {
-            host: '154.16.254.45',
-            name: 'XEON 02',
-            alive: false,
-            ping_type: 'ping',
-            type: 'xeon',
-            notify: true
-        },
-        {
-            host: '5.178.99.232',
-            name: 'XEON 03',
-            alive: false,
-            ping_type: 'ping',
-            type: 'xeon',
-            notify: true
-        },
-        {
-            host: '5.178.99.53',
-            name: 'RYZEN-GAME 01',
-            alive: false,
-            ping_type: 'ping',
-            type: 'games',
-            notify: true
-        },
-        {
-            host: '5.178.99.17',
-            name: 'RYZEN-GAME 02',
-            alive: false,
-            ping_type: 'ping',
-            type: 'games',
-            notify: true
-        },
-        {
-            host: '5.178.99.63',
-            name: 'XEON-GAME 01',
-            alive: false,
-            ping_type: 'ping',
-            type: 'games',
-            notify: true
-        },
-        // Routers
-        {
-            host: process.env.PROTOJX_ROUTER_1 as string,
-            name: 'ROUTER-FR 01',
-            alive: false,
-            ping_type: 'ping',
-            type: 'router',
-            notify: false
-        },
-        {
-            host: process.env.PROTOJX_ROUTER_2 as string,
-            name: 'ROUTER-FR 02',
-            alive: false,
-            ping_type: 'ping',
-            type: 'router',
-            notify: false
-        }
-    ];
 
     private client: Client | null = null;
     private hostsLogRepo: Repository<HostsLog>;
     private followRepo: Repository<Follow>;
     private guildRepo: Repository<Guild>;
-    private serviceRepo: Repository<Service>;
+    public serviceRepo: Repository<Service>;
 
     constructor() {
 
@@ -172,13 +56,14 @@ export class StatusService {
                     if(this.client) {
                         try {
                             const guild = await this.client.guilds.fetch(gdb.guild_id);
+                            console.log(guild.name)
                             const channel = await guild.channels.fetch(gdb.persistent_message_channel_id);
                             if(channel?.isSendable())  {
                                 const message = await channel.messages.fetch(gdb.persistent_message_id);
                                 await message.edit({components: [await this.getUpdatedContainer(true)]});
                             }
                         } catch (error) {
-                            console.log(error)
+                            console.log(error + ' GuildIdInDB : '+gdb.id); 
                         }
                     }
                 });
@@ -266,8 +151,9 @@ export class StatusService {
 
     private async updateClientStatus() {
         if (this.client) {
-            const hosts = this.hosts.length;
-            const hostsAlive = this.hosts.filter((h) => h.alive).length;
+            const hosts_db = await this.serviceRepo.find();
+            const hosts = hosts_db.length;
+            const hostsAlive = hosts_db.filter((h) => h.alive).length;
 
             this.client.user?.setActivity({
                 name: (
@@ -277,56 +163,59 @@ export class StatusService {
         }
     }
 
-    private async fetchAlive(host: Host, notifs : Nofity[]) {
+    private async fetchAlive(service: Service, notifs : Nofity[]) {
 
-        const latestLog = await this.hostsLogRepo.findOne({ where: { host: host.host }, order: { created_at: 'DESC' } });
+        const latestLog = await this.hostsLogRepo.findOne({ where: { service }, order: { created_at: 'DESC' } });
 
         // ? Ping and Request Hosts
-        if (host.ping_type === 'ping') {
-            let res = await ping.promise.probe(host.host, { timeout: 10 });
-            host.alive = res.alive;
-        } else if (host.ping_type === 'website') {
+        if (service.ping_type === 'ping') {
+            let res = await ping.promise.probe(service.host, { timeout: 10 });
+            service.alive = res.alive;
+        } else if (service.ping_type === 'website') {
             try {
-                const response = await fetch(host.host, { method: 'HEAD', signal: AbortSignal.timeout(10000) });
-                host.alive = response.ok;
+                const response = await fetch(service.host, { method: 'HEAD', signal: AbortSignal.timeout(10000) });
+                service.alive = response.ok;
             } catch (error) {
-                host.alive = false;
+                service.alive = false;
             }
         }
 
         // ? Notification System :
-        if (!latestLog || latestLog.status != host.alive) {
+        if (!latestLog || latestLog.status != service.alive) {
             const log = new HostsLog();
-            log.host = host.host;
-            log.status = host.alive;
+            log.service = service;
+            log.status = service.alive;
 
             this.hostsLogRepo.save(log);
 
-            if(latestLog && host.notify) {
-                notifs.push({alive: host.alive, name: host.name, time: new Date(), type: host.type, host: host.host});
+            if(latestLog && service.notify) {
+                notifs.push({alive: service.alive, name: service.name, time: new Date(), type: service.type, host: service});
             }
         }
 
-        return host;
+        this.serviceRepo.save(service);
+
+        return service;
     }
 
     private async fetch(max = 1, notifs : Nofity[] = []) {
 
         const max_ping = 3;
 
-        const hosts = this.hosts.filter((value, index) => index < max * max_ping && index >= (max - 1) * max_ping);
+        const services = await this.serviceRepo.find();
+        const hosts = services.filter((value, index) => index < max * max_ping && index >= (max - 1) * max_ping);
 
         const fetchPromises = hosts.map(host => this.fetchAlive(host, notifs));
         const updatedHosts = await Promise.all(fetchPromises);
 
         updatedHosts.forEach((updatedHost, index) => {
             const originalIndex = (max - 1) * max_ping + index;
-            if (originalIndex < this.hosts.length) {
-                this.hosts[originalIndex] = updatedHost;
+            if (originalIndex < services.length) {
+                services[originalIndex] = updatedHost;
             }
         });
 
-        if (this.hosts.length > max * max_ping) {
+        if (services.length > max * max_ping) {
             await this.fetch(max + 1, notifs);
         }else if(notifs.length > 0){
             // ? Notification System (part 2 !):
@@ -341,7 +230,7 @@ export class StatusService {
             const users = await this.followRepo.find({where: {enable: true}});
             const hosts = notifs.map((n) => n.host);
             const users_ids : string[] = [];
-            users.filter(v => hosts.includes(v.host)).forEach(async (user) => {
+            users.filter(v => hosts.includes(v.service)).forEach(async (user) => {
                 if(!users_ids.includes(user.user_discord)) {
                     users_ids.push(user.user_discord)
                     try {
@@ -356,7 +245,9 @@ export class StatusService {
     }
 
     public async getUpdatedContainer(live : boolean = false): Promise<ContainerBuilder> {
-        const hostTexts = this.hosts.map((s) => {
+        const services = await this.serviceRepo.find({order: {id: 'ASC'}});
+        
+        const hostTexts = services.map((s) => {
             return { type: s.type, value: `- ${s.name} : ${s.alive ? `${process.env.EMOJI_STATUS_ONLINE} Online` : `${process.env.EMOJI_STATUS_OFFLINE} Offline`}` };
         });
 

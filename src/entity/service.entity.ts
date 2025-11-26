@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { HostsLog } from "./hostslog.entity";
+import { Follow } from "./follow.entity";
 
 @Entity({name: 'services'})
 export class Service {
@@ -21,5 +23,12 @@ export class Service {
     type: string;
     
     @Column()
-    notify: boolean;
+    notify: boolean
+
+
+    @OneToMany(() => HostsLog, log => log.service)
+    logs: HostsLog[];
+
+    @OneToMany(() => Follow, follow => follow.service)
+    follows: Follow[];
 }
