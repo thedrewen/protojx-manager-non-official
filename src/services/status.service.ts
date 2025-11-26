@@ -40,7 +40,7 @@ export class StatusService {
             notify: true
         },
         {
-            host: '5.178.99.6',
+            host: '5.178.99.240',
             name: 'RYZEN 02',
             alive: false,
             ping_type: 'ping',
@@ -56,7 +56,7 @@ export class StatusService {
             notify: true
         },
         {
-            host: '154.16.254.10',
+            host: '144.76.35.26',
             name: 'RYZEN7 04',
             alive: false,
             ping_type: 'ping',
@@ -405,13 +405,6 @@ export class StatusService {
         });
 
         container.addSeparatorComponents((s) => s);
-        if(!live) {
-            container.addTextDisplayComponents((t) => t.setContent('This is a status bar to test : (Ryzen7)'))
-            container.addMediaGalleryComponents((m) => m
-                .addItems((i) => i.setURL('attachment://status.png'))
-            );
-        }
-
         container.addTextDisplayComponents((text) => text.setContent(`:globe_with_meridians: Website Status : https://statut.protojx.com/\n${live ? 'Last update : ' : ''}<t:${dayjs().unix()}:f> - Receive automatic notifications when there is an outage with /follow !`));
 
         return container;
