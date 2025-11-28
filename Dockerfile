@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 RUN apt-get update && apt-get install -y iputils-ping
-RUN npm i
+RUN npm clean-install
 
 # RUN npm run register
 
