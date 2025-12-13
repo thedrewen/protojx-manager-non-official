@@ -229,6 +229,7 @@ export class StatusService {
             const users = await this.followRepo.find({where: {enable: true}});
             const hosts = notifs.map((n) => n.host);
             const users_ids : string[] = [];
+            console.log("Sending notifs...")
             users.filter(v => hosts.includes(v.service)).forEach(async (user) => {
                 if(!users_ids.includes(user.user_discord)) {
                     users_ids.push(user.user_discord)
