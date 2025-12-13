@@ -230,7 +230,7 @@ export class StatusService {
             const hosts = notifs.map((n) => n.host);
             const users_ids : string[] = [];
             console.log("Sending notifs...")
-            users.filter(v => hosts.includes(v.service)).forEach(async (user) => {
+            users.filter(v => hosts.map((h) => h.id).includes(v.serviceId)).forEach(async (user) => {
                 if(!users_ids.includes(user.user_discord)) {
                     users_ids.push(user.user_discord)
                     try {
