@@ -44,7 +44,7 @@ const cmd: CommandDefinition = {
         {
             name: 'service',
             execute: async (interaction) => {
-                const services = await statusService.serviceRepo.find();
+                const services = await statusService.serviceRepo.find({order: {id: 'ASC'}});
                 interaction.respond(services.map((v) => ({name: v.name, value: v.name})));
             }
         }
