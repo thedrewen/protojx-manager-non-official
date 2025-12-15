@@ -9,5 +9,5 @@ RUN npm clean-install
 
 # RUN npm run register
 
-ENTRYPOINT [ "npm", "run", "register" ]
+# ENTRYPOINT [ "npm", "run", "register" ]
 CMD [ "npm", "run", "start" ]
