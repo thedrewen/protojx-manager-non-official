@@ -63,8 +63,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		return;
 	}else if(interaction.isAutocomplete()){
 		const option = interaction.options.getFocused(true);
-
-		commands.forEach((value) => {
+		commands.filter((c) => c.data.name == interaction.commandName).forEach((value) => {
 			if(value.autocompletes) {
 				const auto = value.autocompletes.filter((a) => a.name == option.name);
 				if(auto.length >= 1){

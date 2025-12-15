@@ -81,13 +81,12 @@ export class StatusService {
         this.client.user?.setActivity({ name: '💭 Server load and status...' })
     }
 
-    public async getStatusImageBar(host: string) {
+    public async getStatusImageBar(serviceId: number) {
 
         const datas = await this.hostsLogRepo.createQueryBuilder()
-            .where('host = :host AND created_at > :date', {host, date: dayjs().subtract(1, 'week').toDate()}).getMany();
+            .where('HostsLog.serviceId = :serviceId AND HostsLog.created_at > :date ORDER BY HostsLog.created_at ASC', {serviceId, date: dayjs().subtract(1, 'week').toDate()}).getMany();
         
         const uptimes : { up: boolean, date: Dayjs }[] = datas.map((log) => {
-
             return {
                 up: log.status,
                 date: dayjs(log.created_at)

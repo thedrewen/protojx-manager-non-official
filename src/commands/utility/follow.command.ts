@@ -26,8 +26,7 @@ const cmd: CommandDefinition = {
         const userRepo = AppDataSource.getRepository(Follow);
         const hostvalue = interaction.options.getString('service');
 
-        const services = await statusService.serviceRepo.find();
-        const realHost = services.find((v) => v.notify && v.name == hostvalue);
+        const realHost = await statusService.serviceRepo.findOne({where: {name: hostvalue+''}});
 
         if (!hostvalue || !realHost) {
             await interaction.reply({ content: '⚠️ Host not found !', flags: [MessageFlags.Ephemeral] });

@@ -2,8 +2,6 @@ import path from "path";
 import fs from "fs";
 import { configDotenv } from "dotenv";
 import { REST, Routes } from "discord.js";
-import "reflect-metadata";
-import { AppDataSource } from "./data-source";
 
 configDotenv();
 
@@ -59,8 +57,6 @@ const rest = new REST().setToken(process.env.TOKEN);
 
 (async () => {
     try {
-        // Initialize DataSource first
-        await AppDataSource.initialize();
         console.log("Data Source initialized for command deployment!");
         
         console.log(`Started refreshing ${commands.length} application (/) commands.`);
@@ -71,9 +67,6 @@ const rest = new REST().setToken(process.env.TOKEN);
         ) as any[];
         
         console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-        
-        // Close the connection
-        await AppDataSource.destroy();
         process.exit(0);
     } catch (error) {
         console.error('[ERROR] Failed to deploy commands:', error);
